@@ -25,7 +25,7 @@ initialCards.forEach(card => {
 
 allModal.forEach(element => element.classList.add('popup_is-animated'));
 
-// Функции открытия и закрытия
+// Обработчики открытия модальных окон
 editButton.addEventListener('click', () => {
     openModal(editModal, nameInput, jobInput)
 });
