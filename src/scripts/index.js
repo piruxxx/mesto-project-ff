@@ -6,14 +6,16 @@ import { createCard, likeCardHandler, deleteCard } from './card.js';
 // DOM-узлы
 const cardList = document.querySelector('.places__list');
 const imageModal = document.querySelector('.popup_type_image');
+
+// Форма редактирования профиля
 const addModalForm = document.forms['new-place'];
 const cardName = addModalForm.querySelector('input[name="place-name"]');
 const cardLink = addModalForm.querySelector('input[name="link"]');
-
-// Форма редактирования профиля
 const formEditProfile = document.querySelector('[name="edit-profile"]');
 const nameInput = formEditProfile.querySelector('.popup__input_type_name');
 const jobInput = formEditProfile.querySelector('.popup__input_type_description');
+const profileTitle = document.querySelector('.profile__title');
+const profileDescription = document.querySelector('.profile__description');
 
 // Модальные окна
 const editModal = document.querySelector('.popup_type_edit');
@@ -21,6 +23,8 @@ const buttonOpenEditProfileForm = document.querySelector('.profile__edit-button'
 const addModal = document.querySelector('.popup_type_new-card');
 const buttonOpenAddCardForm = document.querySelector('.profile__add-button');
 const popups = document.querySelectorAll('.popup');
+const popupImage = imageModal.querySelector('.popup__image');
+const popupCaption = imageModal.querySelector('.popup__caption');
 
 // Функция рендера карточки
 const renderCard = (element, prepend = false) => {
@@ -39,16 +43,18 @@ initialCards.forEach(card => {
 
 popups.forEach(element => element.classList.add('popup_is-animated'));
 
-// Обработчики открытия модальных окон
+// Обработчики событий
 buttonOpenEditProfileForm.addEventListener('click', () => {
     openModal(editModal, nameInput, jobInput)
 });
 
 buttonOpenAddCardForm.addEventListener('click', () => openModal(addModal));
 
+formEditProfile.addEventListener('submit', submitFormEditProfile);
+
 addModalForm.addEventListener('submit', function (evt){
     evt.preventDefault();
-    
+
     const newCardData = { 
         name: cardName.value, 
         link: cardLink.value 
@@ -60,12 +66,9 @@ addModalForm.addEventListener('submit', function (evt){
     const newCard = createCard(newCardData, deleteCard, showPopupImage, likeCardHandler);
 
     renderCard(newCard, true);
-})
+});
 
 function showPopupImage(cardObject){
-    const popupImage = imageModal.querySelector('.popup__image');
-    const popupCaption = imageModal.querySelector('.popup__caption');
-
     popupCaption.textContent = cardObject.name;
     popupImage.src = cardObject.link;
     popupImage.alt = cardObject.name;
@@ -77,13 +80,8 @@ function showPopupImage(cardObject){
 function submitFormEditProfile(evt) {
     evt.preventDefault();
 
-    const nameValue = nameInput.value;
-    const jobValue = jobInput.value;
-
-    document.querySelector('.profile__title').textContent = nameValue;
-    document.querySelector('.profile__description').textContent = jobValue;
+    profileTitle.textContent = nameInput.value;
+    profileDescription.textContent = jobInput.value;
 
     closeModal(editModal);
-}
-
-formEditProfile.addEventListener('submit', submitFormEditProfile);
+};
